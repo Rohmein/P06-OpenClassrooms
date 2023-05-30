@@ -125,6 +125,45 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+#filters {
+	text-align: center;
+	margin: 51px 0;
+}
+
+.btn-filter {
+	font-family: 'Syne';
+	font-weight: 700;
+	border: 1px solid #1D6154;
+	background-color: white;
+	color: #1D6154;
+	text-align: center;
+	border-radius: 60px;
+	padding: 9px 0;
+}
+
+.btn-filter.active {
+	background-color: #1D6154;
+	border: 1px solid #1D6154;
+	color: white;
+  }
+
+.btn-filter.tous {
+	padding: 9px 29px;
+}
+
+.btn-filter.objets {
+	padding: 9px 21px;
+}
+
+.btn-filter.appartements {
+	padding: 9px 15px;
+}
+
+.btn-filter.hotels {
+	padding: 9px 10px;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
