@@ -1,37 +1,45 @@
 #connexion {
-    text-align: center;
-    width: 50%;
-    margin: auto;
-    margin-top: 150px;
+  text-align: center;
+  width: 50%;
+  margin: auto;
+  margin-top: 150px;
 }
 
 li span {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 #connexion form {
-	text-align: left;
-	margin-top: 37px;
-	display: flex;
-	flex-direction: column;
+  position: relative;
+  text-align: left;
+  margin-top: 37px;
+  display: flex;
+  flex-direction: column;
 }
 
 #connexion input {
-	height: 50px;
-	font-size: 1.2em;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  height: 50px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
 #connexion label {
-	margin: 2em 0 1em 0;
+  margin: 2em 0 1em 0;
+}
+
+.error-message {
+  color: red;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 15px;
 }
 
 .mdp-oubli {
-    color: #3D3D3D;
-    text-decoration: underline;
+  color: #3d3d3d;
+  text-decoration: underline;
 }
 
 footer {
-    margin-top: 355px;
+  margin-top: 355px;
 }
