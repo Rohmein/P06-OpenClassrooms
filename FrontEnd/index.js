@@ -91,13 +91,13 @@ console.log(sessionStorage.token);
 const hiddenElements = document.querySelectorAll(".edition__visibility");
 
 if (!sessionStorage.token) {
-  hiddenElements.forEach((elements) =>
-    elements.classList.add("edition__visibility")
+  hiddenElements.forEach((element) =>
+    element.classList.add("edition__visibility")
   );
   logout.style.display = "none";
 } else {
-  hiddenElements.forEach((elements) =>
-    elements.classList.remove("edition__visibility")
+  hiddenElements.forEach((element) =>
+    element.classList.remove("edition__visibility")
   );
   login.style.display = "none";
   filters.style.display = "none";
@@ -107,3 +107,28 @@ logout.addEventListener("click", () => {
   document.location.href = "http://127.0.0.1:5501/FrontEnd/login.html";
   sessionStorage.removeItem("token");
 });
+
+// Gestion de la modale
+
+// const openModal = (event) => {
+//   event.preventDefault();
+//   const target = document.querySelector(event.target.getAttribute("href"));
+//   target.style.display = null;
+//   console.log(target);
+
+//   // target.setAttribute("aria-hidden", false);
+//   // target.setAttribute("aria-modal", true);
+// };
+
+// document.querySelector(".js-modal").addEventListener("click", openModal);
+
+const modalContainer = document.querySelector(".modal-container");
+const modalTriggers = document.querySelectorAll(".modal-trigger");
+
+modalTriggers.forEach((trigger) =>
+  trigger.addEventListener("click", toggleModal)
+);
+
+function toggleModal() {
+  modalContainer.classList.toggle("active");
+}
