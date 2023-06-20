@@ -25,9 +25,11 @@ function genererProjets(projets) {
 }
 
 // Appel de la fonction qui affiche les projets sur le site
+
 genererProjets(projets);
 
 // Création de l'écouteur d'évènement qui supprime la classe 'active' des filtres
+
 const filtres = document.querySelector("#filters");
 
 const buttons = filtres.getElementsByClassName("btn-filter");
@@ -40,6 +42,7 @@ for (let i = 0; i < buttons.length; i++) {
 }
 
 // Création des écouteurs d'évènement qui affichent les projets selon les filtres choisis
+
 const filtreTous = document.querySelector(".tous");
 
 filtreTous.addEventListener("click", function () {
@@ -108,27 +111,95 @@ logout.addEventListener("click", () => {
   sessionStorage.removeItem("token");
 });
 
-// Gestion de la modale
+// Gestion de l'ouverture et de la fermeture de la modale
 
-// const openModal = (event) => {
-//   event.preventDefault();
-//   const target = document.querySelector(event.target.getAttribute("href"));
-//   target.style.display = null;
-//   console.log(target);
+function switchModal() {
+  const modalContainer = document.querySelector(".modal-container");
+  const modalTriggers = document.querySelectorAll(".modal-trigger");
 
-//   // target.setAttribute("aria-hidden", false);
-//   // target.setAttribute("aria-modal", true);
-// };
+  const modalContainer2 = document.querySelector(".modal-container2");
+  const modalTriggers2 = document.querySelectorAll(".modal-trigger2");
+  const addPicture = document.getElementById("add-picture-btn");
+  const modalArrow = document.querySelector(".modal-arrow");
 
-// document.querySelector(".js-modal").addEventListener("click", openModal);
+  function toggleModal() {
+    modalContainer.classList.toggle("active");
+  }
 
-const modalContainer = document.querySelector(".modal-container");
-const modalTriggers = document.querySelectorAll(".modal-trigger");
+  modalTriggers.forEach((trigger) =>
+    trigger.addEventListener("click", toggleModal)
+  );
 
-modalTriggers.forEach((trigger) =>
-  trigger.addEventListener("click", toggleModal)
-);
+  function toggleModal2() {
+    modalContainer2.classList.toggle("active");
+  }
 
-function toggleModal() {
-  modalContainer.classList.toggle("active");
+  modalTriggers2.forEach((trigger) =>
+    trigger.addEventListener("click", toggleModal2)
+  );
+
+  function nextModal() {
+    modalContainer.classList.toggle("active");
+    modalContainer2.classList.toggle("active");
+  }
+
+  addPicture.addEventListener("click", nextModal);
+
+  function previousModal() {
+    modalContainer2.classList.toggle("active");
+    modalContainer.classList.toggle("active");
+  }
+
+  modalArrow.addEventListener("click", previousModal);
 }
+
+switchModal();
+
+// Intégration des photos à la modale
+
+function modalProjets(projets) {
+  for (let i = 0; i < projets.length; i++) {
+    const article = projets[i];
+
+    const picturesContainer = document.querySelector(".modal-pictures");
+
+    const pictures = document.createElement("figure");
+
+    const pictureElement = document.createElement("img");
+    pictureElement.src = article.imageUrl;
+
+    const editionText = document.createElement("figcaption");
+    editionText.textContent = "éditer";
+    editionText.classList.add("modal-edition-btn");
+
+    // const deleteButtons = document.createElement("img");
+    // deleteButtons.innerHTML += `<i class="fa-regular fa-trash-can modal-delete-picture"></i>`;
+
+    picturesContainer.appendChild(pictures);
+
+    pictures.appendChild(pictureElement);
+    pictures.appendChild(editionText);
+  }
+}
+
+modalProjets(projets);
+
+// Ajout des nouveaux projets via le formulaire de la modale
+
+const preview = document.getElementById("output");
+
+function showPreview(event) {
+  if (event.target.files.length > 0) {
+    let output = document.querySelector(".output");
+    let icon = document.querySelector(".output_icon");
+
+    let src = URL.createObjectURL(event.target.files[0]);
+    let preview = document.getElementById("output_preview");
+    preview.src = src;
+    preview.style.display = "block";
+    output.style.display = "none";
+    icon.style.display = "none";
+  }
+}
+
+preview.addEventListener("change", showPreview);
