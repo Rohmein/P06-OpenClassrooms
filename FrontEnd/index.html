@@ -32,27 +32,34 @@
 			<a aria-label="close modal"><i class="fa-solid fa-xmark close-modal modal-trigger2"></i></a>
 			<h2 id="modalTitle">Ajout photo</h2>
 
-			<form method="post" class="formulaire">
+			<form method="POST" id="formulaire">
 				
 					<div class="formulaire_input">
 			
-						<div class="preview"><img id="output_preview"></div>
+						<div class="preview"><img id="image_preview"></div>
 
-						<i class="fa-regular fa-image fa-2xl output_icon"></i>
+						<i class="fa-regular fa-image fa-2xl image_icon"></i>
 			
-						<label for="output" class="output">+ Ajouter photo</label>
-						<input type="file" id="output" accept="image/*">
+						<label for="image" class="image">+ Ajouter photo</label>
+						<input type="file" name="image" accept="image/*" id="image">
 			
 					</div>
 				
 				<label for="title" class="form-title">Titre</label>
 				<input type="text" name="title" id="title">
 				<label for="category" class="form-category">Catégorie</label>
-				<input type="select" name="category" id="category">
+				<select type="select" name="category" id="category">
+					<option value="1">Objets</option>
+					<option value="2">Appartements</option>
+					<option value="3">Hôtels & restaurants</option>
+				</select>
+
+				<hr class="modal-border">
+
+				<input type="submit" id="formulaire_confirm" value="Valider">
+
 			</form>
 
-			<hr class="modal-border">
-			<input type="submit" id="modal-confirm" value="Valider">
 		</div>
 	</div>
 	

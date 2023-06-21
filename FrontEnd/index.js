@@ -164,6 +164,7 @@ function modalProjets(projets) {
     const picturesContainer = document.querySelector(".modal-pictures");
 
     const pictures = document.createElement("figure");
+    pictures.classList.add("gallery-picture");
 
     const pictureElement = document.createElement("img");
     pictureElement.src = article.imageUrl;
@@ -172,29 +173,45 @@ function modalProjets(projets) {
     editionText.textContent = "éditer";
     editionText.classList.add("modal-edition-btn");
 
-    // const deleteButtons = document.createElement("img");
-    // deleteButtons.innerHTML += `<i class="fa-regular fa-trash-can modal-delete-picture"></i>`;
+    const deleteButtons = document.createElement("div");
+    deleteButtons.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+    deleteButtons.classList.add("modal-delete-picture");
 
     picturesContainer.appendChild(pictures);
 
     pictures.appendChild(pictureElement);
     pictures.appendChild(editionText);
+    pictures.appendChild(deleteButtons);
+
+    // Suppression de projets existants
+
+    deleteButtons.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const deleteButtons = article.id;
+
+      console.log(deleteButtons);
+
+      // fetch("http://localhost:5678/api/works/${deleteButtons}", {
+      //   method: "DELETE",
+      // });
+    });
   }
 }
 
 modalProjets(projets);
 
-// Ajout des nouveaux projets via le formulaire de la modale
+// Ajout de la preview d'une image à envoyer via le formulaire
 
-const preview = document.getElementById("output");
+const preview = document.getElementById("image");
 
 function showPreview(event) {
   if (event.target.files.length > 0) {
-    let output = document.querySelector(".output");
-    let icon = document.querySelector(".output_icon");
+    let output = document.querySelector(".image");
+    let icon = document.querySelector(".image_icon");
 
     let src = URL.createObjectURL(event.target.files[0]);
-    let preview = document.getElementById("output_preview");
+    let preview = document.getElementById("image_preview");
     preview.src = src;
     preview.style.display = "block";
     output.style.display = "none";
@@ -203,3 +220,28 @@ function showPreview(event) {
 }
 
 preview.addEventListener("change", showPreview);
+
+// Envoi des projets sur le serveur
+
+const sendForm = document.getElementById("formulaire");
+
+sendForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const selectedPicture = document.getElementById("image");
+  const selectedTitle = document.getElementById("title").value;
+  const selectedCategory = parseInt(document.getElementById("category").value);
+
+  const formData = new FormData();
+  formData.append("image", selectedPicture.files[0]);
+  formData.append("title", selectedTitle);
+  formData.append("category", selectedCategory);
+
+  fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${sessionStorage.token}` },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
+});

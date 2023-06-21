@@ -221,6 +221,21 @@ body {
   margin: 46px 105px 0 105px;
 }
 
+.gallery-picture {
+  position: relative;
+}
+
+.modal-delete-picture {
+  position: absolute;
+  background: black;
+  color: white;
+  padding: 4px;
+  border-radius: 2px;
+  top: 8px;
+  right: 5px;
+  cursor: pointer;
+}
+
 .modal-edition-btn {
   text-align: start;
   font-weight: 400;
@@ -299,7 +314,8 @@ body {
   display: none;
 }
 
-.modal-container2 input {
+.modal-container2 input,
+select {
   height: 50px;
   font-size: 1.2em;
   border: none;
@@ -317,7 +333,7 @@ body {
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-#modal-confirm {
+#formulaire_confirm {
   font-family: "Syne";
   font-weight: 700;
   color: white;
