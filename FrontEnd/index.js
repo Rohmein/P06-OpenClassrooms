@@ -174,7 +174,7 @@ function modalProjets(projets) {
     editionText.classList.add("modal-edition-btn");
 
     const deleteButtons = document.createElement("div");
-    deleteButtons.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+    deleteButtons.innerHTML = `<i class="fa-solid fa-trash-can fa-sm"></i>`;
     deleteButtons.classList.add("modal-delete-picture");
 
     picturesContainer.appendChild(pictures);
@@ -183,18 +183,24 @@ function modalProjets(projets) {
     pictures.appendChild(editionText);
     pictures.appendChild(deleteButtons);
 
-    // Suppression de projets existants
+    // Suppression de photos
 
-    deleteButtons.addEventListener("click", (event) => {
-      event.preventDefault();
+    deleteButtons.addEventListener("click", async (event) => {
+      event.preventDefault;
 
-      const deleteButtons = article.id;
+      const projectId = article.id;
 
-      console.log(deleteButtons);
-
-      // fetch("http://localhost:5678/api/works/${deleteButtons}", {
-      //   method: "DELETE",
-      // });
+      const projectDeleted = await fetch(
+        `http://localhost:5678/api/works/${projectId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${sessionStorage.token}` },
+        }
+      );
+      const newProjectArray = projets.filter((projet) => {
+        return projet.id != projectId;
+      });
+      genererProjets(newProjectArray);
     });
   }
 }
@@ -231,17 +237,25 @@ sendForm.addEventListener("submit", (event) => {
   const selectedPicture = document.getElementById("image");
   const selectedTitle = document.getElementById("title").value;
   const selectedCategory = parseInt(document.getElementById("category").value);
+  const confirmButton = document.getElementById("formulaire_confirm");
 
-  const formData = new FormData();
-  formData.append("image", selectedPicture.files[0]);
-  formData.append("title", selectedTitle);
-  formData.append("category", selectedCategory);
+  if (!selectedPicture.files[0] || !selectedTitle || !selectedCategory) {
+    confirmButton.setAttribute("disabled", true);
+    return;
+  } else {
+    confirmButton.setAttribute("disabled", false);
+    confirmButton.style.background = "#1D6154";
+    const formData = new FormData();
+    formData.append("image", selectedPicture.files[0]);
+    formData.append("title", selectedTitle);
+    formData.append("category", selectedCategory);
 
-  fetch("http://localhost:5678/api/works", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${sessionStorage.token}` },
-    body: formData,
-  })
-    .then((response) => response.json())
-    .catch((error) => console.log(error));
+    fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${sessionStorage.token}` },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .catch((error) => console.log(error));
+  }
 });

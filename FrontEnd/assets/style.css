@@ -268,6 +268,7 @@ body {
   position: absolute;
   top: 30px;
   left: 30px;
+  cursor: pointer;
 }
 
 .modal-container2 form {
@@ -316,10 +317,17 @@ body {
 
 .modal-container2 input,
 select {
-  height: 50px;
+  font-family: "Work Sans";
   font-size: 1.2em;
+  height: 50px;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  padding-left: 16px;
+}
+
+.modal-container2 input:focus,
+select:focus {
+  outline: none;
 }
 
 .modal-container2 .form-title,
@@ -337,7 +345,7 @@ select {
   font-family: "Syne";
   font-weight: 700;
   color: white;
-  background-color: #a7a7a7;
+  background: #a7a7a7;
   margin: 2em auto;
   border-radius: 60px;
   width: 236px;
@@ -345,6 +353,10 @@ select {
   font-size: 14px;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.confirm_enabled {
+  background: #1d6154;
 }
 
 .edition {
