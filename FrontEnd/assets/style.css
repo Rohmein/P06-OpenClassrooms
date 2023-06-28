@@ -146,7 +146,6 @@ body {
 }
 
 .modal-container {
-  /* display: none; */
   visibility: hidden;
   text-align: center;
   position: fixed;
@@ -234,6 +233,22 @@ body {
   top: 8px;
   right: 5px;
   cursor: pointer;
+}
+
+.modal-arrow-picture {
+  position: absolute;
+  display: none;
+  background: black;
+  color: white;
+  padding: 4px;
+  border-radius: 2px;
+  top: 8px;
+  right: 28px;
+  cursor: pointer;
+}
+
+.gallery-picture:hover .modal-arrow-picture {
+  display: block;
 }
 
 .modal-edition-btn {

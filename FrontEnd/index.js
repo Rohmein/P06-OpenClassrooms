@@ -30,9 +30,7 @@ genererProjets(projets);
 
 // Création de l'écouteur d'évènement qui supprime la classe 'active' des filtres
 
-const filtres = document.querySelector("#filters");
-
-const buttons = filtres.getElementsByClassName("btn-filter");
+const buttons = document.getElementsByClassName("btn-filter");
 
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].addEventListener("click", () => {
@@ -177,13 +175,18 @@ function modalProjets(projets) {
     deleteButtons.innerHTML = `<i class="fa-solid fa-trash-can fa-sm"></i>`;
     deleteButtons.classList.add("modal-delete-picture");
 
+    const hoverButtons = document.createElement("div");
+    hoverButtons.innerHTML = `<i class="fa-solid fa-arrows-up-down-left-right"></i>`;
+    hoverButtons.classList.add("modal-arrow-picture");
+
     picturesContainer.appendChild(pictures);
 
     pictures.appendChild(pictureElement);
     pictures.appendChild(editionText);
     pictures.appendChild(deleteButtons);
+    pictures.appendChild(hoverButtons);
 
-    // Suppression de photos
+    // Suppression de projets
 
     deleteButtons.addEventListener("click", async (event) => {
       event.preventDefault;
@@ -200,7 +203,7 @@ function modalProjets(projets) {
       const newProjectArray = projets.filter((projet) => {
         return projet.id != projectId;
       });
-      genererProjets(newProjectArray);
+      // genererProjets(newProjectArray);
     });
   }
 }
@@ -210,6 +213,7 @@ modalProjets(projets);
 // Ajout de la preview d'une image à envoyer via le formulaire
 
 const preview = document.getElementById("image");
+const confirmButton = document.getElementById("formulaire_confirm");
 
 function showPreview(event) {
   if (event.target.files.length > 0) {
@@ -222,6 +226,7 @@ function showPreview(event) {
     preview.style.display = "block";
     output.style.display = "none";
     icon.style.display = "none";
+    confirmButton.style.background = "#1D6154";
   }
 }
 
@@ -229,22 +234,14 @@ preview.addEventListener("change", showPreview);
 
 // Envoi des projets sur le serveur
 
-const sendForm = document.getElementById("formulaire");
-
-sendForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
+function sendProject() {
   const selectedPicture = document.getElementById("image");
   const selectedTitle = document.getElementById("title").value;
   const selectedCategory = parseInt(document.getElementById("category").value);
   const confirmButton = document.getElementById("formulaire_confirm");
 
-  if (!selectedPicture.files[0] || !selectedTitle || !selectedCategory) {
-    confirmButton.setAttribute("disabled", true);
-    return;
-  } else {
+  if (selectedPicture.files[0] && selectedTitle.length > 0) {
     confirmButton.setAttribute("disabled", false);
-    confirmButton.style.background = "#1D6154";
     const formData = new FormData();
     formData.append("image", selectedPicture.files[0]);
     formData.append("title", selectedTitle);
@@ -257,5 +254,15 @@ sendForm.addEventListener("submit", (event) => {
     })
       .then((response) => response.json())
       .catch((error) => console.log(error));
+  } else {
+    confirmButton.setAttribute("disabled", true);
+    return;
   }
+}
+
+const sendForm = document.getElementById("formulaire");
+
+sendForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sendProject();
 });
