@@ -1,13 +1,14 @@
 // Envoi d'une requête à l'API pour récupérer (GET) les ressources du site
-const listeProjet = await fetch("http://localhost:5678/api/works");
-const projets = await listeProjet.json();
+// const listeProjet = await fetch("http://localhost:5678/api/works");
+// const projets = await listeProjet.json();
 
 // Création d'une fonction qui va permettre d'afficher les projets sur le site
 function genererProjets(projets) {
+  const projetElements = document.querySelector(".gallery");
+  projetElements.innerHTML = "";
+
   for (let i = 0; i < projets.length; i++) {
     const article = projets[i];
-
-    const projetElements = document.querySelector(".gallery");
 
     const projetElement = document.createElement("figure");
 
@@ -26,7 +27,15 @@ function genererProjets(projets) {
 
 // Appel de la fonction qui affiche les projets sur le site
 
-genererProjets(projets);
+let projets = [];
+// Appel de la fonction qui affiche les projets sur le site
+document.addEventListener("DOMContentLoaded", async function () {
+  const reponse = await fetch("http://localhost:5678/api/works/");
+  projets = await reponse.json();
+
+  genererProjets(projets);
+  modalProjets(projets);
+});
 
 // Création de l'écouteur d'évènement qui supprime la classe 'active' des filtres
 
@@ -119,6 +128,7 @@ function switchModal() {
   const modalTriggers2 = document.querySelectorAll(".modal-trigger2");
   const addPicture = document.getElementById("add-picture-btn");
   const modalArrow = document.querySelector(".modal-arrow");
+  const confirmButton = document.getElementById("formulaire_confirm");
 
   function toggleModal() {
     modalContainer.classList.toggle("active");
@@ -149,6 +159,7 @@ function switchModal() {
   }
 
   modalArrow.addEventListener("click", previousModal);
+  confirmButton.addEventListener("click", previousModal);
 }
 
 switchModal();
@@ -156,10 +167,11 @@ switchModal();
 // Intégration des photos à la modale
 
 function modalProjets(projets) {
+  const picturesContainer = document.querySelector(".modal-pictures");
+  picturesContainer.innerHTML = "";
+
   for (let i = 0; i < projets.length; i++) {
     const article = projets[i];
-
-    const picturesContainer = document.querySelector(".modal-pictures");
 
     const pictures = document.createElement("figure");
     pictures.classList.add("gallery-picture");
@@ -203,12 +215,11 @@ function modalProjets(projets) {
       const newProjectArray = projets.filter((projet) => {
         return projet.id != projectId;
       });
-      // genererProjets(newProjectArray);
+      modalProjets(newProjectArray);
+      genererProjets(newProjectArray);
     });
   }
 }
-
-modalProjets(projets);
 
 // Ajout de la preview d'une image à envoyer via le formulaire
 
@@ -253,6 +264,10 @@ function sendProject() {
       body: formData,
     })
       .then((response) => response.json())
+      .then((projet) => {
+        modalProjets([...projets, projet]);
+        genererProjets([...projets, projet]);
+      })
       .catch((error) => console.log(error));
   } else {
     confirmButton.setAttribute("disabled", true);
