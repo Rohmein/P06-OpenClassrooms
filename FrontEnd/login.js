@@ -19,7 +19,7 @@ function connexionForm() {
       .then((response) => {
         if (response.token) {
           sessionStorage.setItem("token", response.token);
-          document.location.href = "http://127.0.0.1:5501/FrontEnd/index.html";
+          document.location.href = "index.html";
           sessionStorage.token = response.token;
         } else {
           errorMessage.innerHTML +=
