@@ -1,6 +1,5 @@
-// Envoi d'une requête à l'API pour récupérer (GET) les ressources du site
-// const listeProjet = await fetch("http://localhost:5678/api/works");
-// const projets = await listeProjet.json();
+let projets = [];
+let projectIdDeleted = [];
 
 // Création d'une fonction qui va permettre d'afficher les projets sur le site
 function genererProjets(projets) {
@@ -27,7 +26,6 @@ function genererProjets(projets) {
 
 // Appel de la fonction qui affiche les projets sur le site
 
-let projets = [];
 // Appel de la fonction qui affiche les projets sur le site
 document.addEventListener("DOMContentLoaded", async function () {
   const reponse = await fetch("http://localhost:5678/api/works/");
@@ -212,36 +210,47 @@ function modalProjets(projets) {
           headers: { Authorization: `Bearer ${sessionStorage.token}` },
         }
       );
-      const newProjectArray = projets.filter((projet) => {
+      projets = projets.filter((projet) => {
         return projet.id != projectId;
       });
-      modalProjets(newProjectArray);
-      genererProjets(newProjectArray);
+      modalProjets(projets);
+      genererProjets(projets);
+      projectIdDeleted = [...projectIdDeleted, projectId];
     });
   }
 }
 
 // Ajout de la preview d'une image à envoyer via le formulaire
 
-const preview = document.getElementById("image");
+const inputLoad = document.getElementById("image");
 const confirmButton = document.getElementById("formulaire_confirm");
 
 function showPreview(event) {
+  let output = document.querySelector(".image");
+  let icon = document.querySelector(".image_icon");
+  let src = URL.createObjectURL(event.target.files[0]);
+  let preview = document.getElementById("image_preview");
   if (event.target.files.length > 0) {
-    let output = document.querySelector(".image");
-    let icon = document.querySelector(".image_icon");
-
-    let src = URL.createObjectURL(event.target.files[0]);
-    let preview = document.getElementById("image_preview");
     preview.src = src;
     preview.style.display = "block";
     output.style.display = "none";
     icon.style.display = "none";
     confirmButton.style.background = "#1D6154";
+    confirmButton.disabled = false;
+  } else {
+    //confirmButton.style.background = "#A7A7A7";
+    confirmButton.disabled = true;
+    preview.style.display = "none";
+    output.style.display = "block";
+    icon.style.display = "block";
   }
 }
 
-preview.addEventListener("change", showPreview);
+inputLoad.addEventListener("click", (event) => {
+  inputLoad.value = null;
+  confirmButton.disabled = true;
+});
+inputLoad.addEventListener("change", showPreview);
 
 // Envoi des projets sur le serveur
 
@@ -265,8 +274,17 @@ function sendProject() {
     })
       .then((response) => response.json())
       .then((projet) => {
-        modalProjets([...projets, projet]);
-        genererProjets([...projets, projet]);
+        projets = [...projets, projet];
+        if (projectIdDeleted.length) {
+          projets = projets.filter(
+            (projet) => !projectIdDeleted.includes(projet.id)
+          );
+        }
+
+        modalProjets(projets);
+        genererProjets(projets);
+        resetForm();
+        //confirmButton.disabled = true;
       })
       .catch((error) => console.log(error));
   } else {
@@ -276,8 +294,23 @@ function sendProject() {
 }
 
 const sendForm = document.getElementById("formulaire");
-
-sendForm.addEventListener("submit", (event) => {
+confirmButton.addEventListener("click", (event) => {
   event.preventDefault();
   sendProject();
 });
+
+function resetForm() {
+  let preview = document.getElementById("image_preview");
+  let output = document.querySelector(".image");
+  let icon = document.querySelector(".image_icon");
+  let title = document.getElementById("title");
+  let category = document.getElementById("category");
+  title.value = "";
+  category.value = "1";
+  preview.style.display = "none";
+  output.style.display = "block";
+  icon.style.display = "block";
+  const confirmButton = document.getElementById("formulaire_confirm");
+  confirmButton.disabled = true;
+  confirmButton.style.background = "#a7a7a7";
+}
